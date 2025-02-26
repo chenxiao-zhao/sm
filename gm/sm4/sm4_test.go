@@ -70,8 +70,8 @@ func TestSm4_ECB_Encrypt(t *testing.T) {
 		t.Error(err.Error())
 		return
 	}
+	// 将变量的内容以十六进制格式输出
 	fmt.Printf("%x\n", cipherText)
-
 	plainTextWithPadding, err = ECBDecrypt(key, cipherText)
 	if err != nil {
 		t.Error(err.Error())
@@ -83,4 +83,21 @@ func TestSm4_ECB_Encrypt(t *testing.T) {
 		t.Error("decrypt result not equal expected")
 		return
 	}
+}
+func TestSm4_ECB_Decrypt(t *testing.T) {
+	key := []byte("0000000000000000")
+	cipherText := "486c3a8c45519c7680604619343753a4f87308d30d0ed491112dacb04ad1f49e"
+	// 解码
+	cipherByte, err := hex.DecodeString(cipherText)
+	if err != nil {
+		fmt.Printf("publicKey hex decode err: %s", err)
+		return
+	}
+	plainTextWithPadding, err := ECBDecrypt(key, cipherByte)
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	plainText := util.PKCS5UnPadding(plainTextWithPadding)
+	fmt.Println(string(plainText))
 }
